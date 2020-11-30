@@ -1,0 +1,138 @@
+{% extends 'rental_exchange/admin/base.html' %}
+{% load static %}
+{% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Cars</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'admin-home' %}">Home</a></li>
+                        <li class="breadcrumb-item active">Cars</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col">
+                        <div id="table_menu"></div>
+                    </div>
+                    <div class="col">
+                        <a class="btn btn-info float-right" href="{% url 'admin-car-create' %}"><i
+                                class="fas fa-plus"></i> Add</a>
+
+                    </div>
+                </div>
+
+                <!--                <button type="button" id="create-car-btn" class="btn btn-info float-right"><i class="fas fa-plus"></i> Add</button>-->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead class="bg-dark">
+                    <tr>
+                        <th>Car Name</th>
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Owner</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for car in cars %}
+                    <tr>
+                        <td>{{ car.name }}</td>
+                        <td>{{ car.brand }}</td>
+                        <td>{{ car.model_no }} ({{ car.model_year }})</td>
+                        <td>{{ car.owner }}</td>
+                        <td class="project-state">
+                            {% if car.is_active %}
+                            <span class="badge badge-success">Active</span>
+                            {% else %}
+                            <span class="badge badge-warning">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td class="project-actions text-right">
+                            <div>
+                                <!-- Read buttons -->
+                                <button type="button" class="bs-modal btn btn-primary btn-sm"
+                                        data-form-url="{% url 'admin-car-details-view-bsm' car.pk %}">
+                                    <span class="fas fa-eye"></span>
+                                </button>
+                                <a class="btn btn-info btn-sm" href="{% url 'admin-car-update' car.id %}">
+                                    <i class="fas fa-pencil-alt">
+                                    </i>
+                                </a>
+                                <a class="btn btn-danger btn-sm" href="#">
+                                    <i class="fas fa-trash">
+                                    </i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot class="bg-dark">
+                    <tr>
+                        <th>Car Name</th>
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Owner</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}
+
+{% block pageSpecificScript%}
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": true, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#table_menu');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+
+
+</script>
+<script type="text/javascript">
+  $(function () {
+    $("#create-car-btn").modalForm();
+    $(".bs-modal").each(function () {
+      $(this).modalForm({
+          formURL: $(this).data('form-url')
+      });
+    });
+  });
+
+</script>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'rental_exchange/base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+<div class="hero-wrap" style="background-image: url({% static 'rental_exchange/images/bg_1.jpg' %});"
+     data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text justify-content-start align-items-center">
+            <div class="col-lg-6 col-md-6 ftco-animate d-flex align-items-end">
+                <div class="text">
+                    <h1 class="mb-4">Now <span>It's easy for you</span> <span>rent a car</span></h1>
+                    <p style="font-size: 18px;">A small river named Duden flows by their place and supplies it with the
+                        necessary regelialia. It is a paradisematic country, in which roasted parts</p>
+                    <a href="https://vimeo.com/45830194" class="icon-wrap popup-vimeo d-flex align-items-center mt-4">
+                        <div class="icon d-flex align-items-center justify-content-center">
+                            <span class="ion-ios-play"></span>
+                        </div>
+                        <div class="heading-title ml-5">
+                            <span>Easy steps for renting a car</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-2 col"></div>
+            <div class="col-lg-4 col-md-6 mt-0 mt-md-5">
+                <form action="{% url 'login' %}" method="POST" class="request-form ftco-animate">
+                    <h2>Sign In</h2>
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {% if field.help_text %}
+                        <sup>{{ field.help_text }}</sup>
+                        {% endif %}
+                        {{ field.errors }}
+                        {{ field|add_class:"form-control" }}
+                    </div>
+                    {% endfor %}
+                    <div class="form-group">
+                        <input type="submit" value="Sign In" class="btn btn-primary py-3 px-4">
+                    </div>
+                    <p>If you've not an account <a href="{% url 'signup' %}">Register Here</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

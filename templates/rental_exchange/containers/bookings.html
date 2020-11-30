@@ -1,0 +1,117 @@
+{% extends 'rental_exchange/base.html' %}
+{% load static %}
+{% block content %}
+<section class="hero-wrap hero-wrap-2 js-fullheight"
+         style="background-image: url({% static 'rental_exchange/images/bg_2.jpg' %});"
+         data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+            <div class="col-md-9 ftco-animate pb-5">
+                <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'home' %}">Home <i
+                        class="fas fa-angle-right"></i></a></span> <span>Bookings <i
+                        class="fas fa-angle-right"></i></span></p>
+                <h1 class="mb-3 bread">Your Bookings</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="ftco-section ftco-car-details">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 pills">
+                <div class="bd-example bd-example-tabs">
+                    <div class="d-flex justify-content-center">
+                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="pills-description-tab" data-toggle="pill"
+                                   href="#pills-description" role="tab" aria-controls="pills-description"
+                                   aria-expanded="true">Your Booking Requests</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-manufacturer-tab" data-toggle="pill"
+                                   href="#pills-manufacturer" role="tab" aria-controls="pills-manufacturer"
+                                   aria-expanded="true">Your Booked Cars</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-description" role="tabpanel"
+                             aria-labelledby="pills-description-tab">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">Car</th>
+                                                <th scope="col">Start Date</th>
+                                                <th scope="col">Rent For</th>
+                                                <th scope="col">Rental Cost</th>
+                                                <th scope="col">Request Status</th>
+                                                <th scope="col">Rent Status</th>
+                                                <th scope="col">Payment Status</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for booking in booking_requests %}
+                                            <tr>
+                                                <th scope="row"><a href="{% url 'car-detail' booking.car.id %}">{{ booking.car }}</a></th>
+                                                <td>{{ booking.start_date }}</td>
+                                                <td>{{ booking.get_rent_for_display }}</td>
+                                                <td>{{ booking.rental_cost }}</td>
+                                                <td><span class="badge badge-pill {% if booking.request_status == 'Pending' %}badge-warning{% elif booking.request_status == 'Accepted' %}badge-success{% else %}badge-danger{% endif %}">{{ booking.request_status }}</span></td>
+                                                <td><span class="badge badge-pill {% if booking.rent_status == 'On Going' %}badge-info{% else %}badge-danger{% endif %}">{{ booking.rent_status }}</span></td>
+                                                <td><span class="badge badge-pill {% if booking.payment_status == 'Paid' %}badge-warning{% else %}badge-warning{% endif %}">{{ booking.payment_status }}</span></td>
+                                                <td></td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-manufacturer" role="tabpanel"
+                             aria-labelledby="pills-manufacturer-tab">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">Car</th>
+                                                <th scope="col">Start Date</th>
+                                                <th scope="col">Rent For</th>
+                                                <th scope="col">Rental Cost</th>
+                                                <th scope="col">Request Status</th>
+                                                <th scope="col">Rent Status</th>
+                                                <th scope="col">Payment Status</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for booking in booked_cars %}
+                                            <tr>
+                                                <th scope="row"><a href="{% url 'car-detail' booking.car.id %}">{{ booking.car }}</a></th>
+                                                <td>{{ booking.start_date }}</td>
+                                                <td>{{ booking.get_rent_for_display }}</td>
+                                                <td>{{ booking.rental_cost }}</td>
+                                                <td><span class="badge badge-pill {% if booking.request_status == 'Pending' %}badge-warning{% elif booking.request_status == 'Accepted' %}badge-success{% else %}badge-danger{% endif %}">{{ booking.request_status }}</span></td>
+                                                <td><span class="badge badge-pill {% if booking.rent_status == 'On Going' %}badge-info{% else %}badge-danger{% endif %}">{{ booking.rent_status }}</span></td>
+                                                <td><span class="badge badge-pill {% if booking.payment_status == 'Paid' %}badge-warning{% else %}badge-warning{% endif %}">{{ booking.payment_status }}</span></td>
+                                                <td></td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

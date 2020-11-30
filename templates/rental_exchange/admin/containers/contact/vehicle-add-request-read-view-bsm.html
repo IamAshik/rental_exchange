@@ -1,0 +1,65 @@
+{% load widget_tweaks %}
+
+<div class="modal-header">
+    <h3 class="modal-title">Vehicle Add Request Details</h3>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <tbody>
+                                    <tr>
+                                        <th>Client Name</th>
+                                        <td>{{ var.client_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Client Email</th>
+                                        <td>{{ var.client_email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Client Phone</th>
+                                        <td>{{ var.client_phone }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Client Address</th>
+                                        <td>{{ var.client_address }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Vehicle Title</th>
+                                        <td>{{ var.car_title }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Model</th>
+                                        <td>{{ var.car_model }} ({{ var.model_year }})</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Contact Status</th>
+                                        <td><span class="badge badge-pill {% if var.is_contacted %}badge-success{% else %}badge-warning{% endif %}">{% if var.is_contacted %}Contacted{% else %}Not Contacted{% endif %}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Message</th>
+                                        <td>{{ var.message }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Created At</th>
+                                        <td>{{ var.created_at }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                </div><!-- /.card-body -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+</div>

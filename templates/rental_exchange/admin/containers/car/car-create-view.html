@@ -1,0 +1,357 @@
+{% extends 'rental_exchange/admin/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Add New Car</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'admin-home' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'admin-cars' %}">Cars</a></li>
+                        <li class="breadcrumb-item active">Add New Car</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="card">
+            <form action="{% url 'admin-car-create' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card-header">
+                    <!--                <h3 class="card-title">Add New Car</h3>-->
+                    <a class="btn btn-info float-left" href="{% url 'admin-cars' %}"><i class="fas fa-arrow-left"></i>
+                        Go Back To List</a>
+                    <button type="submit" class="btn btn-success float-right"><i class="fas fa-save"></i> Save</button>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-5 col-lg-5">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header bg-dark">
+                                            <h3 class="card-title"><strong>Basic Information</strong></h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                {{ form.owner.label_tag }}
+                                                {% if form.owner.help_text %}
+                                                <sup>{{ form.name.help_text }}</sup>
+                                                {% endif %}
+                                                {{ form.owner.errors }}
+                                                {{ form.owner|add_class:"form-control" }}
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form.name.label_tag }}
+                                                {% if form.name.help_text %}
+                                                <sup>{{ form.name.help_text }}</sup>
+                                                {% endif %}
+                                                {{ form.name.errors }}
+                                                {{ form.name|add_class:"form-control" }}
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col">
+                                                    {{ form.model_no.label_tag }}
+                                                    {% if form.model_no.help_text %}
+                                                    <sup>{{ form.model_no.help_text }}</sup>
+                                                    {% endif %}
+                                                    {{ form.model_no.errors }}
+                                                    {{ form.model_no|add_class:"form-control" }}
+                                                </div>
+                                                <div class="form-group col">
+                                                    {{ form.model_year.label_tag }}
+                                                    {% if form.model_year.help_text %}
+                                                    <sup>{{ form.model_year.help_text }}</sup>
+                                                    {% endif %}
+                                                    {{ form.model_year.errors }}
+                                                    {{ form.model_year|add_class:"form-control" }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form.brand.label_tag }}
+                                                {% if form.brand.help_text %}
+                                                <sup>{{ form.brand.help_text }}</sup>
+                                                {% endif %}
+                                                {{ form.brand.errors }}
+                                                <div class="input-group">
+                                                    {{ form.brand|add_class:"form-control" }}
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text bg-dark"
+                                                              id="inputGroupPrepend3"><a id="btn_add_brand"
+                                                                                         class="btn btn-xs btn-warning float-right"><i
+                                                                class="fas fa-plus"></i></a></span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col">
+                                                    {{ form.mileage.label_tag }}
+                                                    {% if form.mileage.help_text %}
+                                                    <sup>{{ form.mileage.help_text }}</sup>
+                                                    {% endif %}
+                                                    {{ form.mileage.errors }}
+                                                    {{ form.mileage|add_class:"form-control" }}
+                                                </div>
+                                                <div class="form-group col">
+                                                    {{ form.transmission.label_tag }}
+                                                    {% if form.transmission.help_text %}
+                                                    <sup>{{ form.transmission.help_text }}</sup>
+                                                    {% endif %}
+                                                    {{ form.transmission.errors }}
+                                                    {{ form.transmission|add_class:"form-control" }}
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col">
+                                                    {{ form.seats.label_tag }}
+                                                    {% if form.seats.help_text %}
+                                                    <sup>{{ form.seats.help_text }}</sup>
+                                                    {% endif %}
+                                                    {{ form.seats.errors }}
+                                                    {{ form.seats|add_class:"form-control" }}
+                                                </div>
+                                                <div class="form-group col">
+                                                    {{ form.luggage.label_tag }}
+                                                    {% if form.luggage.help_text %}
+                                                    <sup>{{ form.luggage.help_text }}</sup>
+                                                    {% endif %}
+                                                    {{ form.luggage.errors }}
+                                                    {{ form.luggage|add_class:"form-control" }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form.license_no.label_tag }}
+                                                {% if form.license_no.help_text %}
+                                                <sup>{{ form.license_no.help_text }}</sup>
+                                                {% endif %}
+                                                {{ form.license_no.errors }}
+                                                {{ form.license_no|add_class:"form-control" }}
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form.fitness_test.label_tag }}
+                                                {% if form.fitness_test.help_text %}
+                                                <sup>{{ form.fitness_test.help_text }}</sup>
+                                                {% endif %}
+                                                {{ form.fitness_test.errors }}
+                                                {{ form.fitness_test|add_class:"form-control" }}
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form.agreement_paper.label_tag }}
+                                                {% if form.agreement_paper.help_text %}
+                                                <sup>{{ form.agreement_paper.help_text }}</sup>
+                                                {% endif %}
+                                                {{ form.agreement_paper.errors }}
+                                                {{ form.agreement_paper|add_class:"form-control" }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header bg-dark">
+                                            <h3 class="card-title"><strong>Description</strong></h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                {% if form.description.help_text %}
+                                                <sup>{{ form.description.help_text }}</sup>
+                                                {% endif %}
+                                                {{ form.description.errors }}
+                                                {{ form.description|add_class:"form-control" }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4 col-lg-4">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header bg-dark">
+                                            <h3 class="card-title"><strong>Fuel Types</strong></h3>
+                                            <a id="btn_add_fuel" class="btn btn-xs btn-warning float-right"><i
+                                                    class="fas fa-plus"></i></a>
+                                        </div>
+                                        <div class="card-body" style="overflow-y:scroll; height:250px;">
+                                            <div class="form-group">
+                                                {{ form.fuels }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header bg-dark">
+                                            <h3 class="card-title"><strong>Features</strong></h3>
+                                            <a id="btn_add_feature" class="btn btn-xs btn-warning float-right"><i
+                                                    class="fas fa-plus"></i></a>
+
+                                        </div>
+                                        <div class="card-body" style="overflow-y:scroll; height:250px;">
+                                            <div class="form-group">
+                                                {{ form.features }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header bg-dark">
+                                            <h3 class="card-title"><strong>Tags</strong></h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                {% if form.tags.help_text %}
+                                                <sup>{{ form.tags.help_text }}</sup>
+                                                {% endif %}
+                                                {{ form.tags.errors }}
+                                                {{ form.tags|add_class:"form-control tags-input" }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-3 col-lg-3">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header bg-dark">
+                                            <h3 class="card-title"><strong>Pricing</strong></h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                {{ form.rental_price.label_tag }}
+                                                {% if form.rental_price.help_text %}
+                                                <sup>{{ form.rental_price.help_text }}</sup>
+                                                {% endif %}
+                                                {{ form.rental_price.errors }}
+                                                {{ form.rental_price|add_class:"form-control form-inline" }}
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form.price_variable.label_tag }}
+                                                {% if form.price_variable.help_text %}
+                                                <sup>{{ form.price_variable.help_text }}</sup>
+                                                {% endif %}
+                                                {{ form.price_variable.errors }}
+                                                {{ form.price_variable|add_class:"form-control" }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header bg-dark">
+                                            <h3 class="card-title"><strong>Status</strong></h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-check">
+                                                {% if form.is_published.help_text %}
+                                                <sup>{{ form.is_published.help_text }}</sup>
+                                                {% endif %}
+                                                {{ form.is_published.errors }}
+                                                {{ form.is_published|add_class:"form-check-input" }}
+                                                {{ form.is_published.label_tag }}
+                                            </div>
+                                            <div class="form-check">
+                                                {% if form.is_featured.help_text %}
+                                                <sup>{{ form.is_featured.help_text }}</sup>
+                                                {% endif %}
+                                                {{ form.is_featured.errors }}
+                                                {{ form.is_featured|add_class:"form-check-input" }}
+                                                {{ form.is_featured.label_tag }}
+                                            </div>
+                                            <div class="form-check">
+                                                {% if form.is_active.help_text %}
+                                                <sup>{{ form.is_active.help_text }}</sup>
+                                                {% endif %}
+                                                {{ form.is_active.errors }}
+                                                {{ form.is_active|add_class:"form-check-input" }}
+                                                {{ form.is_active.label_tag }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header bg-dark">
+                                            <h3 class="card-title"><strong>Image</strong></h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                {% if form.image.help_text %}
+                                                <sup>{{ form.image.help_text }}</sup>
+                                                {% endif %}
+                                                {{ form.image.errors }}
+                                                {{ form.image|add_class:"form-control car-image-dropify" }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <!-- /.card-body -->
+            </form>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}
+{% block pageSpecificScript%}
+<script>
+    $('.car-image-dropify').dropify();
+
+
+</script>
+<script>
+    $('.tags-input').tagsInput();
+
+
+</script>
+<script type="text/javascript">
+  $(function () {
+     // Create book button opens form in modal with id="create-modal"
+    $("#btn_add_fuel").modalForm({
+        formURL: "{% url 'admin-fuel-bsm-create-on-car' %}"
+    });
+    $("#btn_add_feature").modalForm({
+        formURL: "{% url 'admin-feature-bsm-create-on-car' %}"
+    });
+    $("#btn_add_brand").modalForm({
+        formURL: "{% url 'admin-brand-bsm-create-on-car' %}"
+    });
+
+  });
+
+
+
+</script>
+{% endblock %}

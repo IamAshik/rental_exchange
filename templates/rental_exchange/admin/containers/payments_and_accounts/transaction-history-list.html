@@ -1,0 +1,108 @@
+{% extends 'rental_exchange/admin/base.html' %}
+{% load static %}
+{% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Transaction History</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'admin-home' %}">Home</a></li>
+                        <li class="breadcrumb-item active">Transaction History</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col">
+                        <div id="table_menu"></div>
+                    </div>
+                    <div class="col">
+
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead class="bg-dark">
+                    <tr>
+                        <th>Reference</th>
+                        <th>Vehicle Owner</th>
+                        <th>Added Amount</th>
+                        <th>Added Date</th>
+                        <th>Payment Status</th>
+                        <th>Paid Date</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for th in transaction_history %}
+                    <tr>
+                        <td>{{ th.booking }}</td>
+                        <td>{{ th.booking.car.owner.first_name }} {{ ph.booking.car.owner.last_name }}</td>
+                        <td>{{ th.added_amount }}</td>
+                        <td>{{ th.created_at }}</td>
+                        <td><span class="badge badge-pill {% if th.is_paid %}badge-success{% else %}badge-warning{% endif %}">{% if th.is_paid %}Paid{% else %}Unpaid{% endif %}</span></td>
+                        <td>{{ th.paid_date }}</td>
+                        <td>
+                            {% if not th.is_paid %}
+                            <a href="{% url 'admin-update-transaction-payment-status' th.pk %}" class="btn btn-primary btn-sm">
+                                    Pay Now
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot class="bg-dark">
+                    <tr>
+                        <th>Reference</th>
+                        <th>Vehicle Owner</th>
+                        <th>Added Amount</th>
+                        <th>Added Date</th>
+                        <th>Payment Status</th>
+                        <th>Paid Date</th>
+                        <th>Action</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}
+
+{% block pageSpecificScript%}
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": true, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#table_menu');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
+{% endblock %}

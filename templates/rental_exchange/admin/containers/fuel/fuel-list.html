@@ -1,0 +1,123 @@
+{% extends 'rental_exchange/admin/base.html' %}
+{% load static %}
+{% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Car Fuel Types</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'admin-home' %}">Home</a></li>
+                        <li class="breadcrumb-item active">Car Fuel Types</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col">
+                        <div id="table_menu"></div>
+                    </div>
+                    <div class="col">
+                        <button type="button" id="btn_add_fuel" class="btn btn-info float-right"><i
+                                class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead class="bg-dark">
+                    <tr>
+                        <th>Fuel Type</th>
+                        <th class="text-right">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for fuel in fuels %}
+                    <tr>
+                        <td>{{ fuel.title }}</td>
+                        <td class="project-actions float-right">
+                            <div>
+                                <!-- Read buttons -->
+                                <button type="button" id="read-fuel" class="bs-modal btn btn-primary btn-sm"
+                                        data-form-url="{% url 'admin-fuel-bsm-read' fuel.pk %}">
+                                    <span class="fas fa-eye"></span>
+                                </button>
+                                <!-- Update buttons -->
+                                <button type="button" id="update-fuel" class="bs-modal btn btn-info btn-sm"
+                                        data-form-url="{% url 'admin-fuel-bsm-update' fuel.pk %}">
+                                    <span class="fas fa-pencil-alt"></span>
+                                </button>
+                                <!-- Delete buttons -->
+                                <button type="button" id="delete-fuel" class="bs-modal btn btn-sm btn-danger"
+                                        data-form-url="{% url 'admin-fuel-bsm-delete' fuel.pk %}">
+                                    <span class="fas fa-trash"></span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot class="bg-dark">
+                    <tr>
+                        <th>Fuel Type</th>
+                        <th class="text-right">Actions</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}
+
+{% block pageSpecificScript%}
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": true, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#table_menu');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+$(function () {
+    $(".bs-modal").each(function () {
+      $(this).modalForm({
+          formURL: $(this).data('form-url')
+      });
+    });
+    $("#btn_add_fuel").modalForm({
+        formURL: "{% url 'admin-fuel-bsm-create' %}"
+    });
+  });
+
+
+
+
+
+
+</script>
+{% endblock %}

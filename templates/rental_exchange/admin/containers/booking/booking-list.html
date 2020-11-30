@@ -1,0 +1,154 @@
+{% extends 'rental_exchange/admin/base.html' %}
+{% load static %}
+{% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Booking Requests</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'admin-home' %}">Home</a></li>
+                        <li class="breadcrumb-item active">Booking Requests</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col">
+                        <div id="table_menu"></div>
+                    </div>
+                    <div class="col">
+
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead class="bg-dark">
+                    <tr>
+                        <th>Customer Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Car</th>
+                        <th>Start Date</th>
+                        <th>Rent For</th>
+                        <th>Rental Cost</th>
+                        <th>Rent Status</th>
+                        <th>Request Status</th>
+                        <th>Request Actions</th>
+                        <th>Payment Status</th>
+                        <th class="text-right">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.customer.first_name }} {{ booking.customer.last_name }}</td>
+                        <td>{{ booking.customer.email }}</td>
+                        <td>{{ booking.customer.phone }}</td>
+                        <td>{{ booking.car }}</td>
+                        <td>{{ booking.start_date }}</td>
+                        <td>{{ booking.get_rent_for_display }}</td>
+                        <td>{{ booking.rental_cost }}</td>
+                        <td><span class="badge badge-pill {% if booking.rent_status == 'On Going' %}badge-success{% elif booking.rent_status == 'Closed' %}badge-danger{% else %}badge-warning{% endif %}">{{ booking.rent_status }}</span></td>
+                        <td>
+                            <span class="badge badge-pill {% if booking.request_status == 'Pending' %}badge-warning{% elif booking.request_status == 'Accepted' %}badge-info{% elif booking.request_status == 'Confirmed' %}badge-success{% else %}badge-danger{% endif %}">{{ booking.request_status }}</span>
+                        </td>
+                        <td>
+                            {% if booking.request_status == 'Pending' %}
+                                <a href="{% url 'admin-update-booking-request-status' booking.pk 'Accepted' %}" class="btn btn-info btn-sm">Accept</a>
+                            {% endif %}
+                            {% if booking.request_status != 'Confirmed' %}
+                            <button type="button" class="bs-modal btn btn-sm btn-danger"
+                                    data-form-url="{% url 'admin-booking-bsm-delete' booking.pk %}">
+                                Reject
+                            </button>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if booking.payment_status == 'Paid' %}
+                                <span class="badge badge-pill badge-success">{{ booking.payment_status }}</span>
+                            {% else %}
+                                {% if booking.request_status != 'Pending' %}
+                                    <a href="{% url 'admin-update-booking-payment-status' booking.pk 'Paid' %}" class="btn btn-info btn-sm">Make Paid</a>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        <td class="project-actions float-right">
+                            <div>
+                                <!-- Read buttons -->
+                                <button type="button" class="bs-modal btn btn-primary btn-sm"
+                                        data-form-url="{% url 'admin-booking-details-view-bsm' booking.pk %}">
+                                    <span class="fas fa-eye"></span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot class="bg-dark">
+                    <tr>
+                        <th>Customer Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Car</th>
+                        <th>Start Date</th>
+                        <th>Rent For</th>
+                        <th>Rental Cost</th>
+                        <th>Rent Status</th>
+                        <th>Request Status</th>
+                        <th>Request Actions</th>
+                        <th>Payment Status</th>
+                        <th class="text-right">Actions</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}
+
+{% block pageSpecificScript%}
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": true, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#table_menu');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
+<script>
+   $(function () {
+    $(".bs-modal").each(function () {
+      $(this).modalForm({
+          formURL: $(this).data('form-url')
+      });
+    });
+  });
+</script>
+{% endblock %}
