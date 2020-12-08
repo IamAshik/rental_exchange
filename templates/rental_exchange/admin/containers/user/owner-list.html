@@ -29,8 +29,8 @@
                         <div id="table_menu"></div>
                     </div>
                     <div class="col">
-                        <button type="button" id="btn_add_owner" class="btn btn-info float-right"><i
-                                class="fas fa-plus"></i> Add</button>
+                        <a class="btn btn-info float-right" href="{% url 'admin-owner-create' %}"><i
+                                class="fas fa-plus"></i> Add</a>
 
                     </div>
                 </div>
@@ -112,9 +112,6 @@
       $(this).modalForm({
           formURL: $(this).data('form-url')
       });
-    });
-    $("#btn_add_owner").modalForm({
-        formURL: "{% url 'admin-owner-bsm-create' %}"
     });
   });
 </script>

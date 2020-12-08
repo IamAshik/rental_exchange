@@ -125,18 +125,25 @@ class OwnerListView(ListView):
         return obj
 
 
-class OwnerBSModalCreateView(FormView):
-    template_name = 'rental_exchange/admin/containers/user/owner-create-view-bsm.html'
+class OwnerCreateView(FormView):
+    template_name = 'rental_exchange/admin/containers/user/owner-create.html'
     form_class = OwnerCreationForm
     success_message = 'Owner is successfully registered.'
     success_url = reverse_lazy('admin-owner-list')
+
+    def get_initial(self):
+        initial = super(OwnerCreateView, self).get_initial()
+        initial['user_type'] = 'CarOwner'
+        return initial
 
     def form_valid(self, form):
         """ process user signup"""
         user = form.save(commit=False)
         user.user_type = 'CarOwner'
         user.save()
-
+        messages.success(self.request, 'Owner is successfully registered.')
+        if user is not None:
+            return HttpResponseRedirect(self.success_url)
         return super().form_valid(form)
 
 

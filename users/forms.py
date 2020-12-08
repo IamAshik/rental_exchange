@@ -66,9 +66,9 @@ class OwnerCreationForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
         fields = ('first_name', 'last_name', 'email', 'country', 'city', 'address', 'user_type')
-        widgets = {
-            'user_type': forms.HiddenInput()
-        }
+        # widgets = {
+        #     'user_type': forms.HiddenInput()
+        # }
 
     def clean_password2(self):
         # Check that the two password entries match

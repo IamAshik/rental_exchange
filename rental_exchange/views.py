@@ -17,7 +17,7 @@ from RE import settings
 from RE.settings import DEFAULT_FROM_EMAIL, DEFAULT_TO_EMAIL
 from rental_exchange.forms import ContactForm, CarRegistrationRequestForm, CreateBookingBSModalModelForm, \
     CreateBookingForm, CommentForm
-from rental_exchange.models import Car, System, Contact, CarRegistrationRequest, Blog, CarBooking, Comment
+from rental_exchange.models import Car, System, Contact, CarRegistrationRequest, Blog, CarBooking, Comment, Brand
 from users.forms import UserCreationForm
 from users.models import User
 
@@ -312,4 +312,7 @@ class CarListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['featured_cars'] = Car.objects.filter(is_active=True, is_published=True, is_featured=True)
+        context['models'] = Car.objects.values('model_no').distinct()
+        context['model_years'] = Car.objects.values('model_year').distinct()
+        context['brands'] = Brand.objects.all()
         return context
