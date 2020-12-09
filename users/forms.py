@@ -65,9 +65,10 @@ class OwnerCreationForm(forms.ModelForm):
 
     class Meta:
         model = get_user_model()
-        fields = ('first_name', 'last_name', 'email', 'country', 'city', 'address', 'user_type')
+        fields = ('first_name', 'last_name', 'email', 'country', 'city', 'address', 'user_type', 'is_staff')
         widgets = {
-            'user_type': forms.Select(attrs={'disabled': 'disabled'})
+            'user_type': forms.HiddenInput(),
+            'is_staff': forms.HiddenInput(),
         }
 
     def clean_password2(self):
@@ -95,9 +96,10 @@ class AdminCreationForm(forms.ModelForm):
 
     class Meta:
         model = get_user_model()
-        fields = ('first_name', 'last_name', 'email', 'country', 'city', 'address', 'user_type')
+        fields = ('first_name', 'last_name', 'email', 'country', 'city', 'address', 'user_type', 'is_staff')
         widgets = {
-            'user_type': forms.Select(attrs={'disabled': 'disabled'})
+            'user_type': forms.HiddenInput(),
+            'is_staff': forms.HiddenInput(),
         }
 
     def clean_password2(self):

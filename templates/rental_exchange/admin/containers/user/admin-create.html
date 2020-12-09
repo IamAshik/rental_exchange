@@ -26,6 +26,9 @@
         <div class="card">
             <form action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+                {% endfor %}
                 <div class="card-header">
                     <a class="btn btn-info float-left" href="{% url 'admin-admin-list' %}"><i
                             class="fas fa-arrow-left"></i>
@@ -34,25 +37,92 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <div class="row justify-content-center">
+                    <div class="row">
                         <div class="col-md-6">
-                            <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
-                                {% for error in form.non_field_errors %}
-                                {{ error }}
-                                {% endfor %}
-                            </div>
-
-                            {% for field in form %}
-                            <div class="form-group">
-                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                {% render_field field class="form-control" placeholder=field.label %}
-                                <div class="{% if field.errors %} invalid{% endif %}">
-                                    {% for error in field.errors %}
-                                    <p class="help-block">{{ error }}</p>
-                                    {% endfor %}
+                            <div class="card">
+                                <div class="card-header bg-dark">
+                                    <h3 class="card-title"><strong>Personal Information</strong></h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col">
+                                            {{ form.first_name.label_tag }}
+                                            {% if form.first_name.help_text %}
+                                            <sup>{{ form.first_name.help_text }}</sup>
+                                            {% endif %}
+                                            {{ form.first_name.errors }}
+                                            {{ form.first_name|add_class:"form-control" }}
+                                        </div>
+                                        <div class="form-group col">
+                                            {{ form.last_name.label_tag }}
+                                            {% if form.last_name.help_text %}
+                                            <sup>{{ form.last_name.help_text }}</sup>
+                                            {% endif %}
+                                            {{ form.last_name.errors }}
+                                            {{ form.last_name|add_class:"form-control" }}
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col">
+                                            {{ form.country.label_tag }}
+                                            {% if form.country.help_text %}
+                                            <sup>{{ form.country.help_text }}</sup>
+                                            {% endif %}
+                                            {{ form.country.errors }}
+                                            {{ form.country|add_class:"form-control" }}
+                                        </div>
+                                        <div class="form-group col">
+                                            {{ form.city.label_tag }}
+                                            {% if form.city.help_text %}
+                                            <sup>{{ form.city.help_text }}</sup>
+                                            {% endif %}
+                                            {{ form.city.errors }}
+                                            {{ form.city|add_class:"form-control" }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.address.label_tag }}
+                                        {% if form.address.help_text %}
+                                        <sup>{{ form.address.help_text }}</sup>
+                                        {% endif %}
+                                        {{ form.address.errors }}
+                                        {{ form.address|add_class:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                            {% endfor %}
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-dark">
+                                    <h3 class="card-title"><strong>Authentication</strong></h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        {{ form.email.label_tag }}
+                                        {% if form.email.help_text %}
+                                        <sup>{{ form.email.help_text }}</sup>
+                                        {% endif %}
+                                        {{ form.email.errors }}
+                                        {{ form.email|add_class:"form-control" }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.password1.label_tag }}
+                                        {% if form.password1.help_text %}
+                                        <sup>{{ form.password1.help_text }}</sup>
+                                        {% endif %}
+                                        {{ form.password1.errors }}
+                                        {{ form.password1|add_class:"form-control" }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.password2.label_tag }}
+                                        {% if form.password2.help_text %}
+                                        <sup>{{ form.password2.help_text }}</sup>
+                                        {% endif %}
+                                        {{ form.password2.errors }}
+                                        {{ form.password2|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

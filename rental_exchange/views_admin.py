@@ -140,12 +140,14 @@ class AdminCreateView(FormView):
     def get_initial(self):
         initial = super(AdminCreateView, self).get_initial()
         initial['user_type'] = 'Admin'
+        initial['is_staff'] = True
         return initial
 
     def form_valid(self, form):
         """ process user signup"""
         user = form.save(commit=False)
         user.user_type = 'Admin'
+        user.is_staff = True
         user.save()
         messages.success(self.request, 'Admin is successfully added.')
         if user is not None:
@@ -172,12 +174,14 @@ class OwnerCreateView(FormView):
     def get_initial(self):
         initial = super(OwnerCreateView, self).get_initial()
         initial['user_type'] = 'CarOwner'
+        initial['is_staff'] = True
         return initial
 
     def form_valid(self, form):
         """ process user signup"""
         user = form.save(commit=False)
         user.user_type = 'CarOwner'
+        user.is_staff = True
         user.save()
         messages.success(self.request, 'Owner is successfully registered.')
         if user is not None:
