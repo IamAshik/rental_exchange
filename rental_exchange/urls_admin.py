@@ -52,6 +52,7 @@ urlpatterns = [
     path('users/customer/list/', views.CustomerListView.as_view(), name='admin-customer-list'),
     path('user/profile/<int:pk>/', views.UserProfileDetailView.as_view(), name='admin-user-profile-detail-view'),
     path('user/owner/add/', views.OwnerCreateView.as_view(), name='admin-owner-create'),
+    path('user/admin/add/', views.AdminCreateView.as_view(), name='admin-admin-create'),
 
     # Payments and Accounts
     path('payments-and-accounts/payment-history/list/', views.PaymentHistoryListView.as_view(), name='admin-payment-history-list'),

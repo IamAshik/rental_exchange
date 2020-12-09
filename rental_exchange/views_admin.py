@@ -19,7 +19,7 @@ from rental_exchange.forms import ContactForm, CarForm, FuelModelFormBS, Feature
     BlogModelFormBS
 from rental_exchange.models import Car, System, Contact, Brand, Blog, Feature, Fuel, CarBooking, CarRegistrationRequest, \
     PaymentHistory, TransactionHistory, VehicleOwnerAccount
-from users.forms import UserCreationForm, OwnerCreationForm, LoginForm
+from users.forms import UserCreationForm, OwnerCreationForm, LoginForm, AdminCreationForm
 from users.models import User
 
 
@@ -113,6 +113,28 @@ class AdminListView(ListView):
     def get_queryset(self):
         obj = User.objects.filter(user_type='Admin')
         return obj
+
+
+class AdminCreateView(FormView):
+    template_name = 'rental_exchange/admin/containers/user/admin-create.html'
+    form_class = AdminCreationForm
+    success_message = 'Admin is successfully added.'
+    success_url = reverse_lazy('admin-admin-list')
+
+    def get_initial(self):
+        initial = super(AdminCreateView, self).get_initial()
+        initial['user_type'] = 'Admin'
+        return initial
+
+    def form_valid(self, form):
+        """ process user signup"""
+        user = form.save(commit=False)
+        user.user_type = 'Admin'
+        user.save()
+        messages.success(self.request, 'Admin is successfully added.')
+        if user is not None:
+            return HttpResponseRedirect(self.success_url)
+        return super().form_valid(form)
 
 
 class OwnerListView(ListView):
