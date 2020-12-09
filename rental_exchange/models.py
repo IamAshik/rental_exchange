@@ -33,13 +33,13 @@ class Car(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False)
     brand = models.ForeignKey('Brand', on_delete=models.SET_NULL, blank=False, null=True)
     model_no = models.CharField(max_length=50, blank=False, null=False)
-    model_year = models.IntegerField(
+    model_year = models.PositiveIntegerField(
         validators=[MinValueValidator(1984), MaxValueValidator(datetime.date.today().year)], blank=False)
     license_no = models.CharField(max_length=100, null=True, blank=True)
-    mileage = models.IntegerField(default=0, blank=False, null=False)
+    mileage = models.PositiveIntegerField(default=0, blank=False, null=False)
     transmission = models.CharField(max_length=20, choices=TRANSMISSIONS, blank=False, null=False)
-    seats = models.IntegerField(default=0, blank=False, null=False)
-    luggage = models.IntegerField(default=0, blank=False, null=False)
+    seats = models.PositiveIntegerField(default=0, blank=False, null=False)
+    luggage = models.PositiveIntegerField(default=0, blank=False, null=False)
     fuels = models.ManyToManyField('Fuel', blank=True)
     description = models.TextField(blank=True, null=True)
     rental_price = MoneyField(max_digits=14, decimal_places=2, default=0.00, default_currency='USD', blank=False,
