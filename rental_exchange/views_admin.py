@@ -11,7 +11,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 # Create your views here.
 from django.urls import reverse_lazy
 from django.views import generic
-from django.views.generic import CreateView, UpdateView, ListView, DetailView, FormView
+from django.views.generic import CreateView, UpdateView, ListView, DetailView, FormView, TemplateView
 
 from RE import settings
 from RE.settings import DEFAULT_FROM_EMAIL, DEFAULT_TO_EMAIL
@@ -30,9 +30,25 @@ def is_staff(user):
 @user_passes_test(is_staff, login_url=settings.ADMIN_LOGIN_URL)
 def admin_home_view(request):
     context = {
-        "title": "Dashboard | Rental Exchange Administration"
+        "title": "Dashboard | Rental Exchange Administration",
+        "admin_list": User.objects.filter(user_type='Admin'),
+        "owner_list": User.objects.filter(user_type='CarOwner'),
+        "customer_list": User.objects.filter(user_type='Customer'),
+        "booking_list": CarBooking.objects.filter(request_status='Pending')
     }
     return render(request, 'rental_exchange/admin/containers/home.html', context)
+
+
+# class DashboardView(TemplateView):
+#     template_name = 'rental_exchange/admin/containers/home.html'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(DashboardView, self).get_context_data(**kwargs)
+#         context['admin_list'] = User.objects.filter(user_type='Admin')
+#         context['owner_list'] = User.objects.filter(user_type='CarOwner')
+#         context['customer_list'] = User.objects.filter(user_type='Customer')
+#         context['booking_list'] = CarBooking.objects.filter(request_status='Pending')
+#         return context
 
 
 def admin_car_view(request):

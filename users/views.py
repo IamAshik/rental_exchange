@@ -78,6 +78,12 @@ def logout_view(request):
     return HttpResponseRedirect(reverse_lazy('home'))
 
 
+def admin_logout_view(request):
+    """logout logged in user"""
+    logout(request)
+    return HttpResponseRedirect(reverse_lazy('admin-login'))
+
+
 class AdminLoginView(FormView):
     """login view"""
 

@@ -4,6 +4,7 @@ from rental_exchange import views_admin as views
 urlpatterns = [
     # admin
     path('', views.admin_home_view, name='admin-home'),
+    # path('', views.DashboardView.as_view(), name='admin-home'),
     # car
     path('car/list/', views.admin_car_view, name='admin-cars'),
     path('car/add/', views.CarCreateView.as_view(), name='admin-car-create'),
