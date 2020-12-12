@@ -1,7 +1,10 @@
 from datetime import date
 
 from bootstrap_modal_forms.forms import BSModalModelForm
+from dal import autocomplete
 from django import forms
+from django.contrib import admin
+from django.contrib.admin.widgets import AutocompleteSelect
 from django.forms import ModelForm, CheckboxSelectMultiple
 
 from rental_exchange.models import Car, System, Contact, Feature, Fuel, Brand, Blog, CarRegistrationRequest, CarBooking, \
@@ -22,6 +25,7 @@ class CarForm(ModelForm):
         widgets = {
             'fuels': CheckboxSelectMultiple(),
             'features': CheckboxSelectMultiple(),
+            'owner': autocomplete.ModelSelect2(url='select2_fk'),
         }
         fields = '__all__'
 

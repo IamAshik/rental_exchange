@@ -1,5 +1,7 @@
+from dal import autocomplete
 from django.urls import path
 from rental_exchange import views_admin as views
+from users.models import User
 
 urlpatterns = [
     # admin
@@ -39,14 +41,17 @@ urlpatterns = [
     path('blog/delete/<int:pk>', views.BlogBSModalDeleteView.as_view(), name='admin-blog-bsm-delete'),
     # bookings
     path('booking/list/', views.BookingListView.as_view(), name='admin-booking-list'),
-    path('booking/request/status/update/<int:b_id>/<str:status>/', views.update_booking_request_status, name='admin-update-booking-request-status'),
-    path('booking/payment/status/update/<int:b_id>/<str:status>/', views.update_booking_payment_status, name='admin-update-booking-payment-status'),
+    path('booking/request/status/update/<int:b_id>/<str:status>/', views.update_booking_request_status,
+         name='admin-update-booking-request-status'),
+    path('booking/payment/status/update/<int:b_id>/<str:status>/', views.update_booking_payment_status,
+         name='admin-update-booking-payment-status'),
     path('booking/details/<int:pk>', views.BookingBSModalReadView.as_view(), name='admin-booking-details-view-bsm'),
     path('booking/delete/<int:pk>', views.BookingBSModalDeleteView.as_view(), name='admin-booking-bsm-delete'),
     # contacts
     path('contacts/', views.admin_contact_view, name='admin-contacts'),
     path('vehicle-add-request/list/', views.VehicleAddRequestListView.as_view(), name='admin-vehicle-add-request-list'),
-    path('vehicle-add-request/details/<int:pk>/', views.VehicleAddRequestBSModalReadView.as_view(), name='admin-vehicle-add-request-details-view-bsm'),
+    path('vehicle-add-request/details/<int:pk>/', views.VehicleAddRequestBSModalReadView.as_view(),
+         name='admin-vehicle-add-request-details-view-bsm'),
     # users
     path('users/admin/list/', views.AdminListView.as_view(), name='admin-admin-list'),
     path('users/owner/list/', views.OwnerListView.as_view(), name='admin-owner-list'),
@@ -56,13 +61,23 @@ urlpatterns = [
     path('user/admin/add/', views.AdminCreateView.as_view(), name='admin-admin-create'),
 
     # Payments and Accounts
-    path('payments-and-accounts/payment-history/list/', views.PaymentHistoryListView.as_view(), name='admin-payment-history-list'),
-    path('payments-and-accounts/transaction-history/list/', views.TransactionHistoryListView.as_view(), name='admin-transaction-history-list'),
-    path('payments-and-accounts/vehicle-owner-account/list/', views.VehicleOwnerAccountListView.as_view(), name='admin-vehicle-owner-account-list'),
-    path('payments-and-accounts/transaction-history/payment-status/update/<int:t_id>/', views.update_transaction_payment_status,
+    path('payments-and-accounts/payment-history/list/', views.PaymentHistoryListView.as_view(),
+         name='admin-payment-history-list'),
+    path('payments-and-accounts/transaction-history/list/', views.TransactionHistoryListView.as_view(),
+         name='admin-transaction-history-list'),
+    path('payments-and-accounts/vehicle-owner-account/list/', views.VehicleOwnerAccountListView.as_view(),
+         name='admin-vehicle-owner-account-list'),
+    path('payments-and-accounts/transaction-history/payment-status/update/<int:t_id>/',
+         views.update_transaction_payment_status,
          name='admin-update-transaction-payment-status'),
 
     path('site-default/', views.admin_site_default_view, name='admin-site-default'),
+
+    path(
+        'test-autocomplete/$',
+        autocomplete.Select2QuerySetView.as_view(model=User),
+        name='select2_fk',
+    ),
     path('blank/', views.admin_blank_view, name='admin-blank'),
 
 ]

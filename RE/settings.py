@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_countries',
     'djmoney',
+    'dal',
+    'dal_select2',
     'widget_tweaks',
     'bootstrap_modal_forms',
     'djrichtextfield',
