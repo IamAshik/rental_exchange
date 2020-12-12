@@ -32,14 +32,16 @@ def home_view(request):
     context = {
         "title": "Home | Rental Exchange",
         "cars": cars,
-        "car_registration_request_form": car_registration_request_form
+        "car_registration_request_form": car_registration_request_form,
+        "system_data": System.objects.all()
     }
     return render(request, 'rental_exchange/containers/home.html', context)
 
 
 def about_view(request):
     context = {
-        "title": "About | Rental Exchange"
+        "title": "About | Rental Exchange",
+        "system_data": System.objects.all()
     }
     return render(request, 'rental_exchange/containers/about.html', context)
 
@@ -48,14 +50,16 @@ def blog_view(request):
     blog_list = Blog.objects.all()
     context = {
         "title": "Blog | Rental Exchange",
-        "blog_list": blog_list
+        "blog_list": blog_list,
+        "system_data": System.objects.all()
     }
     return render(request, 'rental_exchange/containers/blog.html', context)
 
 
 def blog_detail_view(request):
     context = {
-        "title": "Blog Details | Rental Exchange"
+        "title": "Blog Details | Rental Exchange",
+        "system_data": System.objects.all()
     }
     return render(request, 'rental_exchange/containers/blog-single.html', context)
 
@@ -66,7 +70,8 @@ def contact_view(request):
     context = {
         "system_info": system_info.first(),
         "title": "Contact | Rental Exchange",
-        "form": form
+        "form": form,
+        "system_data": System.objects.all()
     }
     return render(request, 'rental_exchange/containers/contact.html', context)
 
@@ -80,14 +85,16 @@ def pricing_view(request):
 
 def car_view(request):
     context = {
-        "title": "Car | Rental Exchange"
+        "title": "Car | Rental Exchange",
+        "system_data": System.objects.all()
     }
     return render(request, 'rental_exchange/containers/car.html', context)
 
 
 def car_detail_view(request):
     context = {
-        "title": "Car Detail | Rental Exchange"
+        "title": "Car Detail | Rental Exchange",
+        "system_data": System.objects.all()
     }
     return render(request, 'rental_exchange/containers/car-single.html', context)
 
@@ -188,6 +195,7 @@ class CarDetailView(FormMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(CarDetailView, self).get_context_data(**kwargs)
         context['form'] = CreateBookingForm(initial={'car': self.object, 'customer': self.request.user})
+        context['system_data'] = System.objects.all()
         # , 'customer': self.request.user
         return context
 
@@ -234,6 +242,11 @@ class ContactCreate(SuccessMessageMixin, CreateView):
         )
         return super(ContactCreate, self).form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(ContactCreate, self).get_context_data(**kwargs)
+        context['system_data'] = System.objects.all()
+        return context
+
 
 # class CarRegistrationRequestCreateView(SuccessMessageMixin, CreateView):
 #     model = CarRegistrationRequest
@@ -257,6 +270,7 @@ class BlogDetailView(FormMixin, DetailView):
         context['comment_form'] = CommentForm(initial={'blog': self.object, 'created_by': self.request.user})
         context['comment_list'] = Comment.objects.filter(blog=self.object)
         context['recent_blog_list'] = Blog.objects.all().order_by('-created_by')[:5]
+        context['system_data'] = System.objects.all()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -279,6 +293,11 @@ class ProfileDetailView(DetailView):
     context_object_name = 'user_profile'
     template_name = 'rental_exchange/containers/profile.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['system_data'] = System.objects.all()
+        return context
+
 
 class BookingListView(ListView):
     # specify the model to use
@@ -288,8 +307,10 @@ class BookingListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['booking_requests'] = CarBooking.objects.filter(customer=self.request.user, request_status__in=['Pending', 'Accepted'])
+        # context['booking_requests'] = CarBooking.objects.filter(customer=self.request.user, request_status__in=['Pending', 'Accepted'])
+        context['bookings'] = CarBooking.objects.filter(customer=self.request.user)
         context['booked_cars'] = CarBooking.objects.filter(customer=self.request.user, rent_status='On Going')
+        context['system_data'] = System.objects.all()
         return context
 
 
@@ -315,4 +336,5 @@ class CarListView(ListView):
         context['models'] = Car.objects.values('model_no').distinct()
         context['model_years'] = Car.objects.values('model_year').distinct()
         context['brands'] = Brand.objects.all()
+        context['system_data'] = System.objects.all()
         return context

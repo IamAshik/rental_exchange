@@ -77,13 +77,16 @@
                     </div>
                 </div>
                 {% if not user.is_authenticated or user.user_type != 'Customer' %}
+                {% if not car.is_booked %}
                 <div class="row mt-4">
                     <a href="{% url 'login' %}" class="btn btn-primary btn-outline-black mr-1 text-uppercase">Book now</a>
                 </div>
                 {% endif %}
+                {% endif %}
             </div>
         </div>
         {% if user.is_authenticated and user.user_type == 'Customer' %}
+        {% if not car.is_booked %}
         <div class="row">
             <div class="col-md-12">
                 <form method="post" action="{% url 'car-detail' car.id %}" enctype="multipart/form-data">
@@ -128,6 +131,7 @@
                 </form>
             </div>
         </div>
+        {% endif %}
         {% endif %}
         <!--        <div class="row">-->
         <!--            <div class="col-md d-flex align-self-stretch ftco-animate">-->

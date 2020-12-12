@@ -71,7 +71,9 @@ urlpatterns = [
          views.update_transaction_payment_status,
          name='admin-update-transaction-payment-status'),
 
-    path('site-default/', views.admin_site_default_view, name='admin-site-default'),
+    path('site-default/', views.SystemListView.as_view(), name='admin-site-default'),
+    path('site-default/create/', views.SystemCreateView.as_view(), name='admin-site-default-create'),
+    path('site-default/update/<int:pk>/', views.SystemUpdateView.as_view(), name='admin-site-default-update'),
 
     path(
         'test-autocomplete/$',

@@ -47,6 +47,7 @@
                         <th>Rental Cost</th>
                         <th>Rent Status</th>
                         <th>Request Status</th>
+                        <th>Remaining</th>
                         <th>Request Actions</th>
                         <th>Payment Status</th>
                         <th class="text-right">Actions</th>
@@ -65,6 +66,11 @@
                         <td><span class="badge badge-pill {% if booking.rent_status == 'On Going' %}badge-success{% elif booking.rent_status == 'Closed' %}badge-danger{% else %}badge-warning{% endif %}">{{ booking.rent_status }}</span></td>
                         <td>
                             <span class="badge badge-pill {% if booking.request_status == 'Pending' %}badge-warning{% elif booking.request_status == 'Accepted' %}badge-info{% elif booking.request_status == 'Confirmed' %}badge-success{% else %}badge-danger{% endif %}">{{ booking.request_status }}</span>
+                        </td>
+                        <td>
+                            {% if booking.rent_status == 'On Going' %}
+                            {{ booking.get_remaining_days }}
+                            {% endif %}
                         </td>
                         <td>
                             {% if booking.request_status == 'Pending' %}
@@ -109,6 +115,7 @@
                         <th>Rental Cost</th>
                         <th>Rent Status</th>
                         <th>Request Status</th>
+                        <th>Remaining</th>
                         <th>Request Actions</th>
                         <th>Payment Status</th>
                         <th class="text-right">Actions</th>

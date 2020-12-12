@@ -16,7 +16,7 @@ from django.views.generic import CreateView, UpdateView, ListView, DetailView, F
 from RE import settings
 from RE.settings import DEFAULT_FROM_EMAIL, DEFAULT_TO_EMAIL
 from rental_exchange.forms import ContactForm, CarForm, FuelModelFormBS, FeatureModelFormBS, BrandModelFormBS, \
-    BlogModelFormBS
+    BlogModelFormBS, SystemForm
 from rental_exchange.models import Car, System, Contact, Brand, Blog, Feature, Fuel, CarBooking, CarRegistrationRequest, \
     PaymentHistory, TransactionHistory, VehicleOwnerAccount
 from users.forms import UserCreationForm, OwnerCreationForm, LoginForm, AdminCreationForm
@@ -34,7 +34,8 @@ def admin_home_view(request):
         "admin_list": User.objects.filter(user_type='Admin'),
         "owner_list": User.objects.filter(user_type='CarOwner'),
         "customer_list": User.objects.filter(user_type='Customer'),
-        "booking_list": CarBooking.objects.filter(request_status='Pending')
+        "booking_list": CarBooking.objects.filter(request_status='Pending'),
+        "system_data": System.objects.all()
     }
     return render(request, 'rental_exchange/admin/containers/home.html', context)
 
@@ -130,6 +131,11 @@ class AdminListView(ListView):
         obj = User.objects.filter(user_type='Admin')
         return obj
 
+    def get_context_data(self, **kwargs):
+        context = super(AdminListView, self).get_context_data(**kwargs)
+        context['system_data'] = System.objects.all()
+        return context
+
 
 class AdminCreateView(FormView):
     template_name = 'rental_exchange/admin/containers/user/admin-create.html'
@@ -154,6 +160,11 @@ class AdminCreateView(FormView):
             return HttpResponseRedirect(self.success_url)
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(AdminCreateView, self).get_context_data(**kwargs)
+        context['system_data'] = System.objects.all()
+        return context
+
 
 class OwnerListView(ListView):
     model = User
@@ -163,6 +174,11 @@ class OwnerListView(ListView):
     def get_queryset(self):
         obj = User.objects.filter(user_type='CarOwner')
         return obj
+
+    def get_context_data(self, **kwargs):
+        context = super(OwnerListView, self).get_context_data(**kwargs)
+        context['system_data'] = System.objects.all()
+        return context
 
 
 class OwnerCreateView(FormView):
@@ -188,6 +204,11 @@ class OwnerCreateView(FormView):
             return HttpResponseRedirect(self.success_url)
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(OwnerCreateView, self).get_context_data(**kwargs)
+        context['system_data'] = System.objects.all()
+        return context
+
 
 class CustomerListView(ListView):
     model = User
@@ -198,13 +219,47 @@ class CustomerListView(ListView):
         obj = User.objects.filter(user_type='Customer')
         return obj
 
+    def get_context_data(self, **kwargs):
+        context = super(CustomerListView, self).get_context_data(**kwargs)
+        context['system_data'] = System.objects.all()
+        return context
 
-def admin_site_default_view(request):
-    page_title = "Site Default | Rental Exchange Administration"
-    context = {
-        "title": page_title
-    }
-    return render(request, 'rental_exchange/admin/containers/site-default.html', context)
+
+class SystemListView(ListView):
+    model = System
+    context_object_name = 'systems'
+    template_name = 'rental_exchange/admin/containers/system/site-default.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(SystemListView, self).get_context_data(**kwargs)
+        context['system_data'] = System.objects.all()
+        return context
+
+
+class SystemCreateView(SuccessMessageMixin, CreateView):
+    model = System
+    form_class = SystemForm
+    template_name = 'rental_exchange/admin/containers/system/site-default-create.html'
+    success_url = reverse_lazy('admin-site-default')
+    success_message = 'System Info Added Successfully'
+
+    def get_context_data(self, **kwargs):
+        context = super(SystemCreateView, self).get_context_data(**kwargs)
+        context['system_data'] = System.objects.all()
+        return context
+
+
+class SystemUpdateView(SuccessMessageMixin, UpdateView):
+    model = System
+    form_class = SystemForm
+    template_name = "rental_exchange/admin/containers/system/site-default-update.html"
+    success_url = reverse_lazy('admin-site-default')
+    success_message = 'System Info Updated Successfully'
+
+    def get_context_data(self, **kwargs):
+        context = super(SystemUpdateView, self).get_context_data(**kwargs)
+        context['system_data'] = System.objects.all()
+        return context
 
 
 def admin_profile_view(request):
@@ -223,6 +278,10 @@ class CarCreateView(SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('admin-cars')
     success_message = 'Car Added Successfully'
 
+    def get_context_data(self, **kwargs):
+        context = super(CarCreateView, self).get_context_data(**kwargs)
+        context['system_data'] = System.objects.all()
+        return context
     # def form_valid(self, form):
     #     form.save()
     #     return super(CarCreateView, self).form_valid(form)
@@ -234,6 +293,11 @@ class CarUpdateView(SuccessMessageMixin, UpdateView):
     template_name = "rental_exchange/admin/containers/car/car-update-view.html"
     success_url = reverse_lazy('admin-cars')
     success_message = 'Car Updated Successfully'
+
+    def get_context_data(self, **kwargs):
+        context = super(CarUpdateView, self).get_context_data(**kwargs)
+        context['system_data'] = System.objects.all()
+        return context
 
 
 class CarBSModalReadView(BSModalReadView):
@@ -392,6 +456,11 @@ class VehicleAddRequestListView(ListView):
     context_object_name = 'vehicle_add_request_list'
     template_name = 'rental_exchange/admin/containers/contact/vehicle-add-request-list.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(VehicleAddRequestListView, self).get_context_data(**kwargs)
+        context['system_data'] = System.objects.all()
+        return context
+
 
 class VehicleAddRequestBSModalReadView(BSModalReadView):
     model = CarRegistrationRequest
@@ -407,6 +476,11 @@ class BookingListView(ListView):
     def get_queryset(self):
         obj = CarBooking.objects.all().order_by('-created_at')
         return obj
+
+    def get_context_data(self, **kwargs):
+        context = super(BookingListView, self).get_context_data(**kwargs)
+        context['system_data'] = System.objects.all()
+        return context
 
 
 class BookingBSModalReadView(BSModalReadView):
@@ -449,11 +523,21 @@ class UserProfileDetailView(DetailView):
     context_object_name = 'user_profile'
     template_name = 'rental_exchange/admin/containers/user/profile.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(UserProfileDetailView, self).get_context_data(**kwargs)
+        context['system_data'] = System.objects.all()
+        return context
+
 
 class PaymentHistoryListView(ListView):
     model = PaymentHistory
     context_object_name = 'payment_history'
     template_name = 'rental_exchange/admin/containers/payments_and_accounts/payment-history-list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(PaymentHistoryListView, self).get_context_data(**kwargs)
+        context['system_data'] = System.objects.all()
+        return context
 
 
 class TransactionHistoryListView(ListView):
@@ -461,11 +545,21 @@ class TransactionHistoryListView(ListView):
     context_object_name = 'transaction_history'
     template_name = 'rental_exchange/admin/containers/payments_and_accounts/transaction-history-list.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(TransactionHistoryListView, self).get_context_data(**kwargs)
+        context['system_data'] = System.objects.all()
+        return context
+
 
 class VehicleOwnerAccountListView(ListView):
     model = VehicleOwnerAccount
     context_object_name = 'vehicle_owner_accounts'
     template_name = 'rental_exchange/admin/containers/payments_and_accounts/vehicle-owner-account-list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(VehicleAddRequestListView, self).get_context_data(**kwargs)
+        context['system_data'] = System.objects.all()
+        return context
 
 
 def update_transaction_payment_status(request, t_id):

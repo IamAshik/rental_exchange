@@ -1,0 +1,211 @@
+{% extends 'rental_exchange/admin/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Add System Info</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'admin-home' %}">Home</a></li>
+                        <li class="breadcrumb-item active">Add System Info</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="card">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+                {% endfor %}
+                <div class="card-header">
+                    <a class="btn btn-info float-left" href="{% url 'admin-site-default' %}"><i
+                            class="fas fa-arrow-left"></i>
+                        Go Back</a>
+                    <button type="submit" class="btn btn-success float-right"><i class="fas fa-save"></i> Save</button>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-dark">
+                                    <h3 class="card-title"><strong>Site Info</strong></h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        {{ form.site_title.label_tag }}
+                                        {% if form.site_title.help_text %}
+                                        <sup>{{ form.site_title.help_text }}</sup>
+                                        {% endif %}
+                                        {{ form.site_title.errors }}
+                                        {{ form.site_title|add_class:"form-control" }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.site_logo.label_tag }}
+                                        {% if form.site_logo.help_text %}
+                                        <sup>{{ form.site_logo.help_text }}</sup>
+                                        {% endif %}
+                                        {{ form.site_logo.errors }}
+                                        {{ form.site_logo|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-dark">
+                                    <h3 class="card-title"><strong>Contact Info</strong></h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        {{ form.contact_email.label_tag }}
+                                        {% if form.contact_email.help_text %}
+                                        <sup>{{ form.contact_email.help_text }}</sup>
+                                        {% endif %}
+                                        {{ form.contact_email.errors }}
+                                        {{ form.contact_email|add_class:"form-control" }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.contact_phone.label_tag }}
+                                        {% if form.contact_phone.help_text %}
+                                        <sup>{{ form.contact_phone.help_text }}</sup>
+                                        {% endif %}
+                                        {{ form.contact_phone.errors }}
+                                        {{ form.contact_phone|add_class:"form-control" }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.contact_address.label_tag }}
+                                        {% if form.contact_address.help_text %}
+                                        <sup>{{ form.contact_address.help_text }}</sup>
+                                        {% endif %}
+                                        {{ form.contact_address.errors }}
+                                        {{ form.contact_address|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-dark">
+                                    <h3 class="card-title"><strong>Email Configuration</strong></h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        {{ form.email_from.label_tag }}
+                                        {% if form.email_from.help_text %}
+                                        <sup>{{ form.email_from.help_text }}</sup>
+                                        {% endif %}
+                                        {{ form.email_from.errors }}
+                                        {{ form.email_from|add_class:"form-control" }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.email_from_password.label_tag }}
+                                        {% if form.email_from_password.help_text %}
+                                        <sup>{{ form.email_from_password.help_text }}</sup>
+                                        {% endif %}
+                                        {{ form.email_from_password.errors }}
+                                        {{ form.email_from_password|add_class:"form-control" }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.email_to.label_tag }}
+                                        {% if form.email_to.help_text %}
+                                        <sup>{{ form.email_to.help_text }}</sup>
+                                        {% endif %}
+                                        {{ form.email_to.errors }}
+                                        {{ form.email_to|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-dark">
+                                    <h3 class="card-title"><strong>Social URLs</strong></h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        {{ form.map_url.label_tag }}
+                                        {% if form.map_url.help_text %}
+                                        <sup>{{ form.map_url.help_text }}</sup>
+                                        {% endif %}
+                                        {{ form.map_url.errors }}
+                                        {{ form.map_url|add_class:"form-control" }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.facebook_url.label_tag }}
+                                        {% if form.facebook_url.help_text %}
+                                        <sup>{{ form.facebook_url.help_text }}</sup>
+                                        {% endif %}
+                                        {{ form.facebook_url.errors }}
+                                        {{ form.facebook_url|add_class:"form-control" }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.twitter_url.label_tag }}
+                                        {% if form.twitter_url.help_text %}
+                                        <sup>{{ form.twitter_url.help_text }}</sup>
+                                        {% endif %}
+                                        {{ form.twitter_url.errors }}
+                                        {{ form.twitter_url|add_class:"form-control" }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.instagram_url.label_tag }}
+                                        {% if form.instagram_url.help_text %}
+                                        <sup>{{ form.instagram_url.help_text }}</sup>
+                                        {% endif %}
+                                        {{ form.instagram_url.errors }}
+                                        {{ form.instagram_url|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-dark">
+                                    <h3 class="card-title"><strong>Copyright Info</strong></h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        {{ form.copyright_owner.label_tag }}
+                                        {% if form.copyright_owner.help_text %}
+                                        <sup>{{ form.copyright_owner.help_text }}</sup>
+                                        {% endif %}
+                                        {{ form.copyright_owner.errors }}
+                                        {{ form.copyright_owner|add_class:"form-control" }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.copyright_year.label_tag }}
+                                        {% if form.copyright_year.help_text %}
+                                        <sup>{{ form.copyright_year.help_text }}</sup>
+                                        {% endif %}
+                                        {{ form.copyright_year.errors }}
+                                        {{ form.copyright_year|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </form>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}
+
+{% block pageSpecificScript%}
+
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends 'rental_exchange/admin/base.html' %}
+{% load static %}
+{% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Site Defaults Settings</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'admin-home' %}">Home</a></li>
+                        <li class="breadcrumb-item active">Site Default Settings</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col">
+
+                    </div>
+                    <div class="col">
+                        {% if systems %}
+                        {% for sys in systems %}
+                        <a class="btn btn-info float-right" href="{% url 'admin-site-default-update' sys.pk %}"><i
+                                class="fas fa-edit"></i> Update</a>
+                        {% endfor %}
+                        {% else %}
+                        <a class="btn btn-info float-right" href="{% url 'admin-site-default-create' %}"><i
+                                class="fas fa-plus"></i> Add</a>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 table-responsive">
+                        {% if systems %}
+                        <table class="table table-bordered table-striped">
+                            <tbody>
+                            {% for sys in systems %}
+                            <tr>
+                                <th colspan="2" class="bg-dark text-center">Site Info</th>
+                            </tr>
+                            <tr>
+                                <th>Site Title</th>
+                                <td>{{ sys.site_title }}</td>
+                            </tr>
+                            <tr>
+                                <th>Site Logo</th>
+                                <td>
+                                    <div style="width:100px;">
+                                        {% if sys.site_logo.url != '' %}
+                                        <img src="{{ sys.site_logo.url }}" width="100%" height="auto" alt="">
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="2" class="bg-dark text-center">Contact Info</th>
+                            </tr>
+                            <tr>
+                                <th>Contact Email</th>
+                                <td>{{ sys.contact_email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Contact Phone</th>
+                                <td>{{ sys.contact_phone }}</td>
+                            </tr>
+                            <tr>
+                                <th>Contact Address</th>
+                                <td>{{ sys.contact_address }}</td>
+                            </tr>
+                            <tr>
+                                <th class="bg-dark text-center" colspan="2">Email Configuration</th>
+                            </tr>
+                            <tr>
+                                <th>Email From</th>
+                                <td>{{ sys.email_from }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email From Password</th>
+                                <td>{{ sys.email_from_password }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email To</th>
+                                <td>{{ sys.email_to }}</td>
+                            </tr>
+                            <tr>
+                                <th colspan="2" class="bg-dark text-center">Social URLs</th>
+                            </tr>
+                            <tr>
+                                <th>Map URL</th>
+                                <td>{{ sys.map_url }}</td>
+                            </tr>
+                            <tr>
+                                <th>Facebook URLs</th>
+                                <td>{{ sys.facebook_url }}</td>
+                            </tr>
+                            <tr>
+                                <th>Twitter URLs</th>
+                                <td>{{ sys.twitter_url }}</td>
+                            </tr>
+                            <tr>
+                                <th>Instagram URLs</th>
+                                <td>{{ sys.instagram_url }}</td>
+                            </tr>
+                            <tr>
+                                <th colspan="2" class="bg-dark text-center">Copyright Info</th>
+                            </tr>
+                            <tr>
+                                <th>Copyright Owner</th>
+                                <td>{{ sys.copyright_owner }}</td>
+                            </tr>
+                            <tr>
+                                <th>Copyright Year</th>
+                                <td>{{ sys.copyright_year }}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <h1>There are no information added.</h1>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}

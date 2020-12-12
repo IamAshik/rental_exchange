@@ -1,5 +1,6 @@
 import datetime
-
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.urls import reverse
 from djrichtextfield.models import RichTextField
@@ -36,6 +37,7 @@ class Car(models.Model):
     model_year = models.PositiveIntegerField(
         validators=[MinValueValidator(1984), MaxValueValidator(datetime.date.today().year)], blank=False)
     license_no = models.CharField(max_length=100, null=True, blank=True)
+    tracking_id = models.CharField(max_length=100, null=True, blank=True)
     mileage = models.PositiveIntegerField(default=0, blank=False, null=False)
     transmission = models.CharField(max_length=20, choices=TRANSMISSIONS, blank=False, null=False)
     seats = models.PositiveIntegerField(default=0, blank=False, null=False)
@@ -70,6 +72,10 @@ class Car(models.Model):
     def get_absolute_url(self):
         # return f"car/{self.id}/"
         return reverse('car-detail', args=[self.id])
+
+    def is_booked(self):
+        bookings = CarBooking.objects.filter(car=self.id, rent_status='On Going')
+        return bookings.exists()
 
 
 class Brand(models.Model):
@@ -317,6 +323,12 @@ class CarBooking(models.Model):
         db_table = "car_booking"
         verbose_name_plural = "Car Bookings".upper()
         ordering = ("-created_at",)
+
+    def get_remaining_days(self):
+        start_date = self.start_date
+        end_date = start_date + relativedelta(months=int(self.rent_for))
+        date_difference = end_date - start_date
+        return '%d Days' % date_difference.days
 
 
 class PaymentHistory(models.Model):

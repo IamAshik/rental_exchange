@@ -26,12 +26,7 @@
                             <li class="nav-item">
                                 <a class="nav-link active" id="pills-description-tab" data-toggle="pill"
                                    href="#pills-description" role="tab" aria-controls="pills-description"
-                                   aria-expanded="true">Your Booking Requests</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="pills-manufacturer-tab" data-toggle="pill"
-                                   href="#pills-manufacturer" role="tab" aria-controls="pills-manufacturer"
-                                   aria-expanded="true">Your Booked Cars</a>
+                                   aria-expanded="true">Your Bookings</a>
                             </li>
                         </ul>
                     </div>
@@ -50,21 +45,44 @@
                                                 <th scope="col">Rental Cost</th>
                                                 <th scope="col">Request Status</th>
                                                 <th scope="col">Rent Status</th>
+                                                <th scope="col">Remaining</th>
                                                 <th scope="col">Payment Status</th>
                                                 <th scope="col">Actions</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            {% for booking in booking_requests %}
+                                            {% for booking in bookings %}
                                             <tr>
-                                                <th scope="row"><a href="{% url 'car-detail' booking.car.id %}">{{ booking.car }}</a></th>
+                                                <th scope="row">
+                                                    <a href="{% url 'car-detail' booking.car.id %}">
+                                                        {{ booking.car }}
+                                                    </a>
+                                                </th>
                                                 <td>{{ booking.start_date }}</td>
                                                 <td>{{ booking.get_rent_for_display }}</td>
                                                 <td>{{ booking.rental_cost }}</td>
-                                                <td><span class="badge badge-pill {% if booking.request_status == 'Pending' %}badge-warning{% elif booking.request_status == 'Accepted' %}badge-success{% else %}badge-danger{% endif %}">{{ booking.request_status }}</span></td>
-                                                <td><span class="badge badge-pill {% if booking.rent_status == 'On Going' %}badge-info{% else %}badge-danger{% endif %}">{{ booking.rent_status }}</span></td>
-                                                <td><span class="badge badge-pill {% if booking.payment_status == 'Paid' %}badge-warning{% else %}badge-warning{% endif %}">{{ booking.payment_status }}</span></td>
-                                                <td></td>
+                                                <td><span
+                                                        class="badge badge-pill {% if booking.request_status == 'Pending' %}badge-warning{% elif booking.request_status == 'Accepted' %}badge-success{% else %}badge-danger{% endif %}">{{ booking.request_status }}</span>
+                                                </td>
+                                                <td><span
+                                                        class="badge badge-pill {% if booking.rent_status == 'On Going' %}badge-info{% else %}badge-danger{% endif %}">{{ booking.rent_status }}</span>
+                                                </td>
+                                                <td>
+                                                    {% if booking.rent_status == 'On Going' %}
+                                                    {{ booking.get_remaining_days }}
+                                                    {% endif %}
+                                                </td>
+                                                <td><span
+                                                        class="badge badge-pill {% if booking.payment_status == 'Paid' %}badge-warning{% else %}badge-warning{% endif %}">{{ booking.payment_status }}</span>
+                                                </td>
+                                                <td>
+                                                    {% if booking.payment_status != 'Paid' and booking.request_status == 'Accepted' %}
+                                                    <!--                                                    <a href="#" class="btn btn-info btn-sm">Pay Now</a>-->
+                                                    <button id="payment-btn" data-booking-id="{{ booking.id }}" data-amount="{{ booking.rental_cost }}" type="button" class="btn btn-info">
+                                                        Pay Now
+                                                    </button>
+                                                    {% endif %}
+                                                </td>
                                             </tr>
                                             {% endfor %}
                                             </tbody>
@@ -73,45 +91,74 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="pills-manufacturer" role="tabpanel"
-                             aria-labelledby="pills-manufacturer-tab">
-                            <div class="col-12">
-                                <div class="table-responsive">
-                                        <table class="table table-striped">
-                                            <thead class="thead-dark">
-                                            <tr>
-                                                <th scope="col">Car</th>
-                                                <th scope="col">Start Date</th>
-                                                <th scope="col">Rent For</th>
-                                                <th scope="col">Rental Cost</th>
-                                                <th scope="col">Request Status</th>
-                                                <th scope="col">Rent Status</th>
-                                                <th scope="col">Payment Status</th>
-                                                <th scope="col">Actions</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {% for booking in booked_cars %}
-                                            <tr>
-                                                <th scope="row"><a href="{% url 'car-detail' booking.car.id %}">{{ booking.car }}</a></th>
-                                                <td>{{ booking.start_date }}</td>
-                                                <td>{{ booking.get_rent_for_display }}</td>
-                                                <td>{{ booking.rental_cost }}</td>
-                                                <td><span class="badge badge-pill {% if booking.request_status == 'Pending' %}badge-warning{% elif booking.request_status == 'Accepted' %}badge-success{% else %}badge-danger{% endif %}">{{ booking.request_status }}</span></td>
-                                                <td><span class="badge badge-pill {% if booking.rent_status == 'On Going' %}badge-info{% else %}badge-danger{% endif %}">{{ booking.rent_status }}</span></td>
-                                                <td><span class="badge badge-pill {% if booking.payment_status == 'Paid' %}badge-warning{% else %}badge-warning{% endif %}">{{ booking.payment_status }}</span></td>
-                                                <td></td>
-                                            </tr>
-                                            {% endfor %}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<!-- Modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Payment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post">
+                    <input id="booking_id" type="hidden">
+                    <input id="amount" type="hidden">
+                </form>
+                <div id="paypal-button-container">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block pageSpecificScript %}
+<script
+        src="https://www.paypal.com/sdk/js?client-id=AXYd5BJF5uA_2eKZgaOiesf9jh4BuEHEb1ELQfkLuYmwNuJNPpqP3kNH7Sa1WMlI2ine3FfgCR2iHMUC&currency=USD"
+        data-sdk-integration-source="button-factory">
+</script>
+<script>
+$(document).ready(function(){
+$('#payment-btn').click(function(){
+    $('#booking_id').val($(this).attr('data-booking-id'));
+    $('#amount').val($(this).attr('data-amount'));
+    $('#paymentModal').modal()
+});
+paypal.Buttons({
+            style: {
+                shape: 'rect',
+                color: 'blue',
+                layout: 'vertical',
+                label: 'checkout',
+
+            },
+            createOrder: function(data, actions) {
+            var amount = '$50';
+<!--                var amount = $('#amount').val();-->
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: amount.replace('$', '')
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    console.log(details);
+                });
+            }
+        }).render('#paypal-button-container');
+});
+</script>
 {% endblock %}

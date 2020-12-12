@@ -257,8 +257,10 @@
     {% block content %}
     {% endblock %}
     <footer class="main-footer">
-        <strong>Copyright &copy; 2020-2020 <a href="#">Rental Exchange</a>.</strong>
+        {% for s in system_data %}
+        <strong>Copyright &copy; {{ s.copyright_year }} <a href="#">{{ s.site_title }}</a>.</strong>
         All rights reserved.
+        {% endfor %}
         <div class="float-right d-none d-sm-inline-block">
             <b>Version</b> 3.1.0
         </div>
