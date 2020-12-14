@@ -145,14 +145,14 @@ STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))
 
 AUTH_USER_MODEL = 'users.User'
 
-DEFAULT_FROM_EMAIL = '1000318@daffodil.ac'
-DEFAULT_TO_EMAIL = 'fahimulislam93@gmail.com'
+DEFAULT_FROM_EMAIL = '1000528@daffodil.ac'
+DEFAULT_TO_EMAIL = 'iatiqul2040@gmail.com'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = "1000318@daffodil.ac"
-EMAIL_HOST_PASSWORD = 'number05'
+EMAIL_HOST_USER = "1000528@daffodil.ac"
+EMAIL_HOST_PASSWORD = 'ashik2040'
 EMAIL_PORT = '587'
 
 ADMIN_LOGIN_URL = 'admin-login'

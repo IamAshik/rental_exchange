@@ -270,6 +270,10 @@ def admin_profile_view(request):
     return render(request, 'rental_exchange/admin/containers/profile.html', context)
 
 
+class AdminProfileView(TemplateView):
+    template_name = 'rental_exchange/admin/containers/profile.html'
+
+
 class CarCreateView(SuccessMessageMixin, CreateView):
     model = Car
     # fields = '__all__'
@@ -557,7 +561,7 @@ class VehicleOwnerAccountListView(ListView):
     template_name = 'rental_exchange/admin/containers/payments_and_accounts/vehicle-owner-account-list.html'
 
     def get_context_data(self, **kwargs):
-        context = super(VehicleAddRequestListView, self).get_context_data(**kwargs)
+        context = super(VehicleOwnerAccountListView, self).get_context_data(**kwargs)
         context['system_data'] = System.objects.all()
         return context
 

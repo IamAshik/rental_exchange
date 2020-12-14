@@ -233,6 +233,7 @@ class ContactCreate(SuccessMessageMixin, CreateView):
         # if system_data is not None:
         #     email_from = system_data.email_from
         #     email_to = system_data.email_to
+
         send_mail(
             form.cleaned_data['subject'],
             form.cleaned_data['message'],
