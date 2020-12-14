@@ -78,7 +78,7 @@
                                                 <td>
                                                     {% if booking.payment_status != 'Paid' and booking.request_status == 'Accepted' %}
                                                     <!--                                                    <a href="#" class="btn btn-info btn-sm">Pay Now</a>-->
-                                                    <button id="payment-btn" data-booking-id="{{ booking.id }}" data-amount="{{ booking.rental_cost }}" type="button" class="btn btn-info">
+                                                    <button data-booking-id="{{ booking.id }}" data-amount="{{ booking.rental_cost }}" type="button" class="btn btn-info payment-btn">
                                                         Pay Now
                                                     </button>
                                                     {% endif %}
@@ -110,6 +110,8 @@
                 </button>
             </div>
             <div class="modal-body">
+                <p class="text-center">Amount to Pay</p>
+                    <h3 class="text-center" id="amount_show"></h3>
                 <form action="" method="post">
                     <input id="booking_id" type="hidden">
                     <input id="amount" type="hidden">
@@ -129,7 +131,9 @@
 </script>
 <script>
 $(document).ready(function(){
-$('#payment-btn').click(function(){
+$('.payment-btn').click(function(){
+    $('#booking_id').val($(this).attr('data-booking-id'));
+    $('#amount_show').html($(this).data('amount'));
     $('#booking_id').val($(this).attr('data-booking-id'));
     $('#amount').val($(this).attr('data-amount'));
     $('#paymentModal').modal()
@@ -143,8 +147,7 @@ paypal.Buttons({
 
             },
             createOrder: function(data, actions) {
-            var amount = '$50';
-<!--                var amount = $('#amount').val();-->
+                var amount = $('#amount').val();
                 return actions.order.create({
                     purchase_units: [{
                         amount: {
@@ -155,6 +158,27 @@ paypal.Buttons({
             },
             onApprove: function(data, actions) {
                 return actions.order.capture().then(function(details) {
+                    if(details.status == 'COMPLETED'){
+                        toastr.success('', 'Payment has been completed', {progressBar:true});
+                        $.ajax({
+                            method: 'POST',
+                            url: '{% url 'payment-success' %}',
+                            dataType: 'JSON',
+                            data: {
+                                booking: $('#booking_id').val(),
+                                transaction: details.id,
+                                csrfmiddlewaretoken: '{{ csrf_token }}'
+                            },
+                            success: function(result){
+                                if(result.status == true){
+                                    window.location.reload();
+                                }
+                            },
+                            error: function(){
+
+                            }
+                        });
+                    }
                     console.log(details);
                 });
             }

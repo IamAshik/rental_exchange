@@ -17,4 +17,5 @@ urlpatterns = [
     path('car/details/<int:pk>/', views.CarDetailView.as_view(), name='car-detail'),
     path('contact/create/', views.ContactCreate.as_view(), name='contact_create'),
     path('request/car/registration/', views.home_view, name='car-registration-request'),
+    path('payment/success/', views.payment_success, name='payment-success'),
 ]

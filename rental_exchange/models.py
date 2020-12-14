@@ -339,6 +339,7 @@ class PaymentHistory(models.Model):
     booking = models.OneToOneField('CarBooking', on_delete=models.CASCADE, null=False, blank=False)
     payment_method = models.CharField(max_length=50, choices=PAYMENT_METHODS, default='Hand Cash')
     amount = MoneyField(max_digits=14, decimal_places=2, default=0.00, default_currency='USD', blank=True, null=True)
+    transaction_id = models.CharField(max_length=255, blank=True, null=True)
     payment_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

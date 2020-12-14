@@ -17,7 +17,8 @@ from RE import settings
 from RE.settings import DEFAULT_FROM_EMAIL, DEFAULT_TO_EMAIL
 from rental_exchange.forms import ContactForm, CarRegistrationRequestForm, CreateBookingBSModalModelForm, \
     CreateBookingForm, CommentForm
-from rental_exchange.models import Car, System, Contact, CarRegistrationRequest, Blog, CarBooking, Comment, Brand
+from rental_exchange.models import Car, System, Contact, CarRegistrationRequest, Blog, CarBooking, Comment, Brand, \
+    PaymentHistory, TransactionHistory
 from users.forms import UserCreationForm
 from users.models import User
 
@@ -339,3 +340,19 @@ class CarListView(ListView):
         context['brands'] = Brand.objects.all()
         context['system_data'] = System.objects.all()
         return context
+
+
+def payment_success(request):
+    booking_id = request.POST['booking']
+    transaction_id = request.POST['transaction']
+    obj = CarBooking.objects.get(pk=booking_id)
+    obj.payment_status = 'Paid'
+    obj.request_status = 'Confirmed'
+    obj.rent_status = 'On Going'
+    obj.save()
+    PaymentHistory.objects.create(booking=obj, amount=obj.rental_cost, transaction_id=transaction_id)
+    owner_percentage = obj.rental_cost * .75
+    TransactionHistory.objects.create(booking=obj, added_amount=owner_percentage)
+    # messages.success(request, 'Payment has been %s' % status)
+    # print(booking_id, transaction_id)
+    return {'status': True, 'msg': 'Order Completed Successfully', 'url': 'customer-bookings'}
